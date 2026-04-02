@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:zx_tape_to_wav/zx_tape_to_wav.dart';
+import 'package:zx_tape_to_wav_x/zx_tape_to_wav.dart';
 
 void main() async {
   await new File('assets/roms/test.tzx').readAsBytes().then((input) =>

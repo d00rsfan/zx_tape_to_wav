@@ -1,16 +1,16 @@
-name: zx_tape_to_wav_example
-description: Demonstrates how to use the zx_tape_to_wav_example
+name: zx_tape_to_wav_x_example
+description: Demonstrates how to use zx_tape_to_wav_x
 
-homepage: https://github.com/semack/zx_tape_to_wav
+homepage: https://github.com/d00rsfan/zx_tape_to_wav
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  zx_tape_to_wav:
+  zx_tape_to_wav_x:
     path: ../
 
 

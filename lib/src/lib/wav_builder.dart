@@ -5,6 +5,7 @@ import 'blocks.dart';
 import 'definitions.dart';
 import 'enums.dart';
 import 'extensions.dart';
+import 'tape_block_info.dart';
 import 'writers/bass_boost_writer.dart';
 import 'writers/binary_writer.dart';
 import 'writers/tapir_writer.dart';
@@ -23,6 +24,9 @@ class WavBuilder {
   final int audioFormat = 1; //pcm
   final Function(int percents)? progress;
   late BinaryWriter _writer;
+  final List<TapeBlockInfo> _blockInfos = [];
+
+  List<TapeBlockInfo> get blockInfos => _blockInfos;
 
   WavBuilder(this.blocks, this.frequency, this.progress,
       {audioFilterType = AudioFilterType.heuristic}) {
@@ -53,6 +57,8 @@ class WavBuilder {
   Uint8List toBytes() {
     int loopRepetitions = 0;
     int? loopIndex;
+    String? currentGroupName;
+    int blockInfoIndex = 0;
     for (var i = 0; i < blocks.length; i++) {
       var block = blocks[i];
       if (block is LoopStartBlock) {
@@ -61,10 +67,24 @@ class WavBuilder {
       } else if (block is LoopEndBlock) {
         loopRepetitions--;
         if (loopRepetitions > 0) i = loopIndex!;
-      } else if (block is JumpToBlock)
+      } else if (block is JumpToBlock) {
         i += block.offset;
-      else {
+      } else if (block is GroupStartBlock) {
+        currentGroupName = block.groupName;
+      } else if (block is GroupEndBlock) {
+        currentGroupName = null;
+      } else {
+        var startSample = _writer.bytes.length;
         _addBlockSoundData(block);
+        var endSample = _writer.bytes.length;
+        _blockInfos.add(TapeBlockInfo.fromBlock(
+          block,
+          blockInfoIndex++,
+          startSample,
+          endSample,
+          frequency,
+          groupName: currentGroupName,
+        ));
         if (progress != null) {
           var percents = 100;
           if (i < blocks.length - 1) percents = ((100 / blocks.length) * i).round();

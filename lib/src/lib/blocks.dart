@@ -216,7 +216,7 @@ class GeneralizedDataBlock extends BlockBase {
 
   @override
   void _loadData(ReadBuffer reader) {
-    var totalBlockLength = reader.getUint32();
+    reader.getUint32(); // totalBlockLength - skip
     _tailMs = reader.getUint16();
 
     var totp = reader.getUint32();

@@ -1,8 +1,7 @@
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
-import 'package:zx_tape_to_wav/src/lib/enums.dart';
-import 'package:zx_tape_to_wav/src/lib/wav_builder.dart';
+import 'package:zx_tape_to_wav_x/src/lib/enums.dart';
+import 'package:zx_tape_to_wav_x/src/lib/tape_conversion_result.dart';
+import 'package:zx_tape_to_wav_x/src/lib/wav_builder.dart';
 
 import 'lib/blocks.dart';
 
@@ -66,6 +65,19 @@ class ZxTape {
     var builder = WavBuilder(_blocks, frequency, progress,
         audioFilterType: audioFilterType);
     return builder.toBytes();
+  }
+
+  /// Returns WAV content and block metadata.
+  Future<TapeConversionResult> toWavBytesWithBlocks(
+      {int frequency = 44100,
+      audioFilterType = AudioFilterType.heuristic,
+      Function(int percents)? progress}) async {
+    if (_blocks.isEmpty) await _load();
+
+    var builder = WavBuilder(_blocks, frequency, progress,
+        audioFilterType: audioFilterType);
+    var wavBytes = builder.toBytes();
+    return TapeConversionResult(wavBytes, builder.blockInfos);
   }
 
   static TapeType _detectTapeType(ByteData data) {

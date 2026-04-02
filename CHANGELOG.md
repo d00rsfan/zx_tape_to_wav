@@ -1,26 +1,20 @@
-# version: 3.1.0+13
-Improved Tapir filter speed.
+## 1.0.0
 
-# version: 3.1.0+13
-Compile time optimizations.
+Maintained fork of [zx_tape_to_wav](https://pub.dev/packages/zx_tape_to_wav).
+Includes all features from the original up to version 3.1.0:
 
-# 3.1.0+9
-Added support of Generalized Data block.
+- Generalized Data block support
+- Tapir analog audio filter implementation
+- Bass boost audio filter
+- Null-safety
+- SpeedLock 2 support
 
-# 3.0.2+8
-Added Tapir audio filter implementation.
+New in this release:
 
-# 3.0.1+5
-Fixed #pause block
+- `toWavBytesWithBlocks()` — returns `TapeConversionResult` with WAV bytes and a list of `TapeBlockInfo` metadata (block type, title, data length, sample offset, time offset, duration)
+- `TapeBlockInfo` and `TapeConversionResult` exported from the public API
 
-# 3.0.1+5
-Optimized converter. Removed detect tape method, use the related property instead.
+Dependencies:
 
-## 3.0.0
-Added null-safety
-
-## 2.1.16
-Fixed SpeedLock 2. Refactoring.
-
-## 2.1.12
-Bass busted the output signal for load stabilization.
+- Dart SDK bumped to >=3.0.0 <4.0.0, Flutter to >=3.0.0
+- `test` dependency bumped to ^1.30.0
