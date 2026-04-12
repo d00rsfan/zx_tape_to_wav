@@ -29,8 +29,9 @@ class ZxTape {
   }
 
   Future _load() async {
-    if (_tapeType == TapeType.unknown)
+    if (_tapeType == TapeType.unknown) {
       throw new ArgumentError('Incompatible data format.');
+    }
 
     _reader = ReadBuffer(_data);
 
@@ -92,7 +93,9 @@ class ZxTape {
       reader = ReadBuffer(data);
       var testBlock = DataBlock(0, reader);
       if (testBlock.isCheckSumValid) return TapeType.tap;
-    } catch (e) {}
+    } catch (_) {
+      // Detection failed — fall through to return unknown
+    }
 
     return TapeType.unknown;
   }

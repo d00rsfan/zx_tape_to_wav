@@ -30,8 +30,9 @@ class WavBuilder {
 
   WavBuilder(this.blocks, this.frequency, this.progress,
       {audioFilterType = AudioFilterType.heuristic}) {
-    if (frequency < 11025)
+    if (frequency < 11025) {
       throw new ArgumentError('Invalid frequency specified $frequency');
+    }
     _writer = _determineWriter(audioFilterType);
     print('using filter $_writer');
     var timeBase = _getLCM(frequency, _cpuFreq);
@@ -48,8 +49,9 @@ class WavBuilder {
       case AudioFilterType.tapir:
         return TapirWriter(frequency);
       case AudioFilterType.heuristic:
-        if (blocks.any((element) => element is GeneralizedDataBlock))
+        if (blocks.any((element) => element is GeneralizedDataBlock)) {
           return _determineWriter(AudioFilterType.tapir);
+        }
         return _determineWriter(AudioFilterType.bassBoost);
     }
   }

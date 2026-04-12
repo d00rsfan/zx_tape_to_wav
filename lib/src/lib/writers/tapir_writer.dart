@@ -71,22 +71,22 @@ class TapirWriter extends BinaryWriter {
             (1 / (_r2 * _c2 * _r1 * _c3 * (_l1_1 - _l3_1) * (_l2_1 - _l3_1))));
   }
 
-  setMic(bool level, double time) {
+  void setMic(bool level, double time) {
     _t += time;
 
     if (level != _lvl) {
       if (_lvl) {
-        var exp_l1_1 = fastexp(_l1_1 * _t);
-        var exp_l2_1 = fastexp(_l2_1 * _t);
-        var exp_l3_1 = fastexp(_l3_1 * _t);
+        var expL11 = fastexp(_l1_1 * _t);
+        var expL21 = fastexp(_l2_1 * _t);
+        var expL31 = fastexp(_l3_1 * _t);
         _u2 = _ucc * _r4_1 / (_r4_1 + _r5) +
-            _a * exp_l1_1 +
-            _b * exp_l2_1 +
-            _c * exp_l3_1;
+            _a * expL11 +
+            _b * expL21 +
+            _c * expL31;
         _u3 = _ucc * _r4_1 / (_r4_1 + _r5) +
-            _a * (1 + _l1_1 * _r2 * _c2) * exp_l1_1 +
-            _b * (1 + _l2_1 * _r2 * _c2) * exp_l2_1 +
-            _c * (1 + _l3_1 * _r2 * _c2) * exp_l3_1;
+            _a * (1 + _l1_1 * _r2 * _c2) * expL11 +
+            _b * (1 + _l2_1 * _r2 * _c2) * expL21 +
+            _c * (1 + _l3_1 * _r2 * _c2) * expL31;
         _u1 = _ucc * _r4_1 / (_r4_1 + _r5) +
             _a *
                 (_l1_1 * _l1_1 * _r2 * _c2 * _r1 * _c3 +
@@ -97,7 +97,7 @@ class TapirWriter extends BinaryWriter {
                     1 +
                     _r1 / _r4_1 +
                     _r1 / _r5) *
-                exp_l1_1 +
+                expL11 +
             _b *
                 (_l2_1 * _l2_1 * _r2 * _c2 * _r1 * _c3 +
                     _l2_1 *
@@ -107,7 +107,7 @@ class TapirWriter extends BinaryWriter {
                     1 +
                     _r1 / _r4_1 +
                     _r1 / _r5) *
-                exp_l2_1 +
+                expL21 +
             _c *
                 (_l3_1 * _l3_1 * _r2 * _c2 * _r1 * _c3 +
                     _l3_1 *
@@ -117,19 +117,19 @@ class TapirWriter extends BinaryWriter {
                     1 +
                     _r1 / _r4_1 +
                     _r1 / _r5) *
-                exp_l3_1;
+                expL31;
       } else {
-        var exp_l1_0 = fastexp(_l1_0 * _t);
-        var exp_l2_0 = fastexp(_l2_0 * _t);
-        var exp_l3_0 = fastexp(_l3_0 * _t);
+        var expL10 = fastexp(_l1_0 * _t);
+        var expL20 = fastexp(_l2_0 * _t);
+        var expL30 = fastexp(_l3_0 * _t);
         _u2 = _ucc * _r4_0 / (_r4_0 + _r5) +
-            _a * exp_l1_0 +
-            _b * exp_l2_0 +
-            _c * exp_l3_0;
+            _a * expL10 +
+            _b * expL20 +
+            _c * expL30;
         _u3 = _ucc * _r4_0 / (_r4_0 + _r5) +
-            _a * (1 + _l1_0 * _r2 * _c2) * exp_l1_0 +
-            _b * (1 + _l2_0 * _r2 * _c2) * exp_l2_0 +
-            _c * (1 + _l3_0 * _r2 * _c2) * exp_l3_0;
+            _a * (1 + _l1_0 * _r2 * _c2) * expL10 +
+            _b * (1 + _l2_0 * _r2 * _c2) * expL20 +
+            _c * (1 + _l3_0 * _r2 * _c2) * expL30;
         _u1 = _ucc * _r4_0 / (_r4_0 + _r5) +
             _a *
                 (_l1_0 * _l1_0 * _r2 * _c2 * _r1 * _c3 +
@@ -140,7 +140,7 @@ class TapirWriter extends BinaryWriter {
                     1 +
                     _r1 / _r4_0 +
                     _r1 / _r5) *
-                exp_l1_0 +
+                expL10 +
             _b *
                 (_l2_0 * _l2_0 * _r2 * _c2 * _r1 * _c3 +
                     _l2_0 *
@@ -150,7 +150,7 @@ class TapirWriter extends BinaryWriter {
                     1 +
                     _r1 / _r4_0 +
                     _r1 / _r5) *
-                exp_l2_0 +
+                expL20 +
             _c *
                 (_l3_0 * _l3_0 * _r2 * _c2 * _r1 * _c3 +
                     _l3_0 *
@@ -160,7 +160,7 @@ class TapirWriter extends BinaryWriter {
                     1 +
                     _r1 / _r4_0 +
                     _r1 / _r5) *
-                exp_l3_0;
+                expL30;
       }
 
       _lvl = level;

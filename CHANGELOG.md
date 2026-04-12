@@ -1,3 +1,9 @@
+## 1.0.1
+
+- Fix 17 static analysis issues flagged by pub.dev (lints/core.yaml)
+- Add `analysis_options.yaml` with `package:lints/core.yaml`
+- Add `lints` as dev dependency
+
 ## 1.0.0
 
 Maintained fork of [zx_tape_to_wav](https://pub.dev/packages/zx_tape_to_wav).

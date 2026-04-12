@@ -25,6 +25,18 @@ flutter test --name 'test tzx conversion'  # Run a single test by name
 - **`WavBuilder`** (`lib/src/lib/wav_builder.dart`) — Synthesizes audio samples from blocks. Manages CPU/sound time synchronization via LCM. Handles loop/jump control blocks. Generates RIFF WAV headers.
 - **Audio filters** (`lib/src/lib/writers/`) — Strategy pattern with `BinaryWriter` (no filter), `BassBoostWriter` (IIR biquad at 250Hz/20dB), and `TapirWriter` (analog microphone circuit simulation based on Tapir 1.0). `AudioFilterType.heuristic` auto-selects Tapir for generalized data blocks, otherwise BassBoost.
 
+## Pre-publish checklist
+
+Run these steps after any code changes before publishing to pub.dev:
+
+```bash
+flutter analyze lib/          # Must show "No issues found" (uses lints/core.yaml)
+flutter test                  # All tests must pass
+flutter pub publish --dry-run # Verify package is ready for publishing
+```
+
+The `analysis_options.yaml` includes `package:lints/core.yaml` — the same ruleset pub.dev uses for scoring. Any lint violations will cost points on pub.dev.
+
 ## Conventions
 
 - Dart 3 (SDK >=3.0.0 <4.0.0)

@@ -50,7 +50,9 @@ class DataBlock extends BlockBase {
 
   bool get isCheckSumValid {
     int sum = 0;
-    for (int i = 0; i < data.length - 1; i++) sum ^= data[i];
+    for (int i = 0; i < data.length - 1; i++) {
+      sum ^= data[i];
+    }
     return data[data.length - 1] == sum;
   }
 
@@ -124,7 +126,9 @@ class PulseSequenceBlock extends BlockBase {
   void _loadData(ReadBuffer reader) {
     var length = reader.getUint8();
     _pulses = Uint16List(length);
-    for (var i = 0; i < length; i++) _pulses[i] = reader.getUint16();
+    for (var i = 0; i < length; i++) {
+      _pulses[i] = reader.getUint16();
+    }
   }
 }
 
@@ -205,7 +209,9 @@ class GeneralizedDataBlock extends BlockBase {
       var t = reader.getUint8();
 
       var d = <int>[];
-      for (var i = 0; i < p; i++) d.add(reader.getUint16());
+      for (var i = 0; i < p; i++) {
+        d.add(reader.getUint16());
+      }
 
       // var d = reader.getUint16List(p);
       var s = SymDef(t, d);
@@ -263,7 +269,7 @@ class GeneralizedDataBlock extends BlockBase {
 
 // 0x20, 0x2A
 class PauseOrStopTheTapeBlock extends BlockBase {
-  var _duration;
+  int _duration = -1;
 
   int get duration => _duration;
 
