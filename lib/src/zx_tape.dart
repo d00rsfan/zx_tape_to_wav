@@ -78,7 +78,8 @@ class ZxTape {
     var builder = WavBuilder(_blocks, frequency, progress,
         audioFilterType: audioFilterType);
     var wavBytes = builder.toBytes();
-    return TapeConversionResult(wavBytes, builder.blockInfos);
+    return TapeConversionResult(wavBytes, builder.blockInfos,
+        warnings: builder.warnings);
   }
 
   static TapeType _detectTapeType(ByteData data) {

@@ -60,7 +60,7 @@ class DataBlock extends BlockBase {
   void _loadData(ReadBuffer reader) {
     var length = reader.getUint16();
     _data = reader.getUint8List(length);
-    if (_data[0] >= 128) _pilotLen = 3223;
+    if (_data.isNotEmpty && _data[0] >= 128) _pilotLen = 3223;
   }
 }
 

@@ -25,8 +25,10 @@ class WavBuilder {
   final Function(int percents)? progress;
   late BinaryWriter _writer;
   final List<TapeBlockInfo> _blockInfos = [];
+  final List<String> _warnings = [];
 
   List<TapeBlockInfo> get blockInfos => _blockInfos;
+  List<String> get warnings => _warnings;
 
   WavBuilder(this.blocks, this.frequency, this.progress,
       {audioFilterType = AudioFilterType.heuristic}) {
@@ -109,10 +111,30 @@ class WavBuilder {
         _addEdge(block.secondSyncLen);
       }
 
-      for (var i = 0; i < block.data.length - 1; i++) {
-        var d = block.data[i];
-        for (var j = 7; j >= 0; j--) {
-          var bit = d & (1 << j) != 0;
+      if (block.data.isEmpty) {
+        _warnings.add('Block #${block.index} has empty data');
+      }
+      if (block.data.isNotEmpty) {
+        for (var i = 0; i < block.data.length - 1; i++) {
+          var d = block.data[i];
+          for (var j = 7; j >= 0; j--) {
+            var bit = d & (1 << j) != 0;
+
+            if (bit) {
+              _addEdge(block.oneLen);
+              _addEdge(block.oneLen);
+            } else {
+              _addEdge(block.zeroLen);
+              _addEdge(block.zeroLen);
+            }
+          }
+        }
+
+        // Last byte
+        var d = block.data[block.data.length - 1];
+
+        for (var i = 7; i >= (8 - block.rem); i--) {
+          var bit = d & (1 << i) != 0;
 
           if (bit) {
             _addEdge(block.oneLen);
@@ -121,21 +143,6 @@ class WavBuilder {
             _addEdge(block.zeroLen);
             _addEdge(block.zeroLen);
           }
-        }
-      }
-
-      // Last byte
-      var d = block.data[block.data.length - 1];
-
-      for (var i = 7; i >= (8 - block.rem); i--) {
-        var bit = d & (1 << i) != 0;
-
-        if (bit) {
-          _addEdge(block.oneLen);
-          _addEdge(block.oneLen);
-        } else {
-          _addEdge(block.zeroLen);
-          _addEdge(block.zeroLen);
         }
       }
       if (block.tailMs > 0) {

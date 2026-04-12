@@ -1,3 +1,9 @@
+## 1.1.0
+
+- Handle corrupted TAP files with zero-length data blocks instead of crashing
+- Add `warnings` field to `TapeConversionResult` — callers can check for tape corruption after conversion
+- `WavBuilder` now collects warnings during WAV generation (e.g. `Block #N has empty data`)
+
 ## 1.0.1
 
 - Fix 17 static analysis issues flagged by pub.dev (lints/core.yaml)

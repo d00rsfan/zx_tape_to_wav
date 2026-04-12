@@ -4,7 +4,7 @@ description: >
   Maintained fork of zx_tape_to_wav with Generalized Data block support
   and Tapir analog audio filter.
 
-version: 1.0.1
+version: 1.1.0
 
 homepage: https://github.com/d00rsfan/zx_tape_to_wav
 
