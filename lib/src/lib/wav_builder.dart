@@ -8,6 +8,7 @@ import 'extensions.dart';
 import 'tape_block_info.dart';
 import 'writers/bass_boost_writer.dart';
 import 'writers/binary_writer.dart';
+import 'writers/sine_writer.dart';
 import 'writers/tapir_writer.dart';
 
 class WavBuilder {
@@ -16,6 +17,7 @@ class WavBuilder {
   double _cpuTimeBase = 0;
   double _sndTimeBase = 0;
   bool _currentLevel = false;
+  int _samplesWritten = 0;
   final int _cpuFreq = 3500000;
   final List<BlockBase> blocks;
   final int frequency;
@@ -50,6 +52,8 @@ class WavBuilder {
         return BassBoostWriter(frequency);
       case AudioFilterType.tapir:
         return TapirWriter(frequency);
+      case AudioFilterType.sine:
+        return SineWriter();
       case AudioFilterType.heuristic:
         if (blocks.any((element) => element is GeneralizedDataBlock)) {
           return _determineWriter(AudioFilterType.tapir);
@@ -78,9 +82,9 @@ class WavBuilder {
       } else if (block is GroupEndBlock) {
         currentGroupName = null;
       } else {
-        var startSample = _writer.bytes.length;
+        var startSample = _samplesWritten;
         _addBlockSoundData(block);
-        var endSample = _writer.bytes.length;
+        var endSample = _samplesWritten;
         _blockInfos.add(TapeBlockInfo.fromBlock(
           block,
           blockInfoIndex++,
@@ -196,6 +200,7 @@ class WavBuilder {
     _cpuTimeStamp += len * _cpuTimeBase;
     while (_sndTimeStamp < _cpuTimeStamp) {
       _writer.writeSample(lvl);
+      _samplesWritten++;
       _sndTimeStamp += _sndTimeBase;
     }
   }

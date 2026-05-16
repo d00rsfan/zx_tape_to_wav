@@ -30,6 +30,50 @@ void main() async {
                 new File('example/assets/out/tap.wav').writeAsBytes(output)));
   });
 
+  test('test tap sine conversion', () async {
+    var input = await File('example/assets/roms/test.tap').readAsBytes();
+    var tape = await ZxTape.create(input);
+    var output = await tape.toWavBytes(
+      audioFilterType: AudioFilterType.sine,
+      frequency: 44100,
+    );
+    await File('example/assets/out/tap_sine.wav').writeAsBytes(output);
+    expect(output.length, greaterThan(44));
+  });
+
+  test('block info offsets are accurate for buffered writers', () async {
+    var input = await File('example/assets/roms/test.tap').readAsBytes();
+    for (var filter in [
+      AudioFilterType.bassBoost,
+      AudioFilterType.sine,
+      AudioFilterType.tapir,
+    ]) {
+      var tape = await ZxTape.create(input);
+      var result = await tape.toWavBytesWithBlocks(
+        frequency: 44100,
+        audioFilterType: filter,
+      );
+      var totalAudioSamples = result.wavBytes.length - 44;
+
+      expect(result.blocks.first.sampleOffset, 0,
+          reason: '$filter: first block must start at 0');
+
+      // Blocks must be contiguous: each block's reconstructed end equals
+      // next block's start, and the last block's end equals total audio.
+      for (var i = 0; i < result.blocks.length; i++) {
+        var b = result.blocks[i];
+        var durSamples =
+            (b.duration.inMicroseconds * 44100 / 1000000).round();
+        var nextStart = i + 1 < result.blocks.length
+            ? result.blocks[i + 1].sampleOffset
+            : totalAudioSamples;
+        expect(b.sampleOffset + durSamples, equals(nextStart),
+            reason:
+                '$filter: block $i end (offset+duration) must equal next block start (or total samples for last)');
+      }
+    }
+  });
+
   test('test block info from tap', () async {
     var input = await File('example/assets/roms/test.tap').readAsBytes();
     var tape = await ZxTape.create(input);

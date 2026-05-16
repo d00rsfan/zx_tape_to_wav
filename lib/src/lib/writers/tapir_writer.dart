@@ -42,7 +42,7 @@ class TapirWriter extends BinaryWriter {
   double _u1 = 0, _u2 = 0, _u3 = 0, _t = 0, _a = 0, _b = 0, _c = 0;
   bool _lvl = true;
   bool _seriesVal = false;
-  int _seriesLen = 1;
+  int _seriesLen = 0;
 
   TapirWriter(this.frequency) {
     _a = -(_ucc * _r4_1 / (_r4_1 + _r5)) *
@@ -310,6 +310,7 @@ class TapirWriter extends BinaryWriter {
   }
 
   void _flush() {
+    if (_seriesLen <= 0) return;
     var seriesDuration = _seriesLen / frequency;
     setMic(!_seriesVal, seriesDuration);
 
@@ -320,6 +321,7 @@ class TapirWriter extends BinaryWriter {
       var v = (s * Definitions.signalValue).round();
       super.writeSample(v);
     }
+    _seriesLen = 0;
   }
 
   @override
